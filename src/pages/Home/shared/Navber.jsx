@@ -16,9 +16,9 @@ const Navber = () => {
   }
   const links = <>
        <li><NavLink to="/">Home</NavLink></li>
-       <li><NavLink to="/">Home</NavLink></li>
-       <li><NavLink to="/">Home</NavLink></li>
-       <li><NavLink to="/">Home</NavLink></li>
+       <li><NavLink to="/myApplications">My Applications</NavLink></li>
+       <li><NavLink to="addService">Add Service</NavLink></li>
+       <li><NavLink to="/myservices">My Services</NavLink></li>
           
 
   </>
