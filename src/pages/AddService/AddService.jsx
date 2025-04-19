@@ -1,115 +1,188 @@
-
 import React from 'react';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const AddService = () => {
-    const {user} = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
+  const handleAddService = e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const initialData = Object.fromEntries(formData.entries());
 
+    fetch('http://localhost:5000/services', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(initialData),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your service has been saved",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          navigate('/myservices');
+        }
+      });
+  };
 
-    const handleAddService = e =>{
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const initialData = Object.fromEntries(formData.entries());
-        // console.log(initialData);
-        fetch('http://localhost:5000/services',{
-           method: 'POST' ,
-           headers: {
-            'content-type' : 'application/json'
-           },
-           body: JSON.stringify(initialData),
-        })
-        .then(res => res.json())
-        .then(data => {
-             if(data.insertedId){
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: "Your service has been saved",
-                                showConfirmButton: false,
-                                timer: 1500
-                              });
-                             navigate('/myservices') 
-                          }
-        })
+  return (
+    <div className="px-4 py-10 sm:px-6 lg:px-8 bg-base-100 min-h-screen">
+      <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Post a New Service</h2>
 
+        <form onSubmit={handleAddService} className="space-y-4">
+          {/* Service Title */}
+          <div>
+            <label className="label">
+              <span className="label-text">Service Title</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              placeholder="Service Title"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
 
-    }
-    return (
-        <div>
-            <h2 className='text-3xl font-bold'>Post a new Service</h2>
-            <form onSubmit={handleAddService} className="card-body">
-                {/* Service Title */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Service Title</span>
-                    </label>
-                    <input type="text" name='title' placeholder="Service Title" className="input input-bordered" required />
-                </div>
-                {/* Service Description */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Service Description</span>
-                    </label>
-                    
-                    <textarea className="textarea textarea-bordered" name='description' placeholder="Service Description"></textarea>
-                </div>
-                {/* Company Name */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">companyName</span>
-                    </label>
-                    <input type="text" name='companyName' placeholder="companyName" className="input input-bordered" required />
+          {/* Service Description */}
+          <div>
+            <label className="label">
+              <span className="label-text">Service Description</span>
+            </label>
+            <textarea
+              className="textarea textarea-bordered w-full"
+              name="description"
+              rows={4}
+              placeholder="Describe your service"
+              required
+            />
+          </div>
 
-                </div>
-                {/* website */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Website</span>
-                    </label>
-                    <input type="text" name='website' placeholder="Website" className="input input-bordered" required />
-                </div>
-                {/* user Email */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">User Email</span>
-                    </label>
-                    <input type="text" defaultValue={user?.email}  name='userEmail' placeholder="User Email" className="input input-bordered" required />
-                </div>
-                {/* Company Logo */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">serviceImage</span>
-                    </label>
-                    <input type="url" name='image' placeholder="serviceImage" className="input input-bordered" required />
-                </div>
-                {/* Service Type  */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Service Type</span>
-                    </label>
-                    <select defaultValue="Pick a Service Type" className="select select-ghost w-full max-w-xs">
-                        <option disabled >Pick a Service Type</option>
-                        <option>Design</option>
-                        <option>HR Services</option>
-                        <option>Development</option>
-                    </select>
-                </div>
-                {/* Price */}
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Price</span>
-                    </label>
-                    <input type="number" name='price' placeholder="servicePrice" className="input input-bordered" required />
-                </div>
-                {/* Submit Button  */}
-                <div className="form-control mt-6">
-                    <button className="btn btn-primary">submit</button>
-                </div>
-            </form>
-        </div>
-    );
+          {/* Company Name */}
+          <div>
+            <label className="label">
+              <span className="label-text">Company Name</span>
+            </label>
+            <input
+              type="text"
+              name="companyName"
+              placeholder="Company Name"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* Website */}
+          <div>
+            <label className="label">
+              <span className="label-text">Website</span>
+            </label>
+            <input
+              type="text"
+              name="website"
+              placeholder="Website URL"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="label">
+              <span className="label-text">Category</span>
+            </label>
+            <input
+              type="text"
+              name="category"
+              placeholder="Service Category"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* User Email */}
+          <div>
+            <label className="label">
+              <span className="label-text">User Email</span>
+            </label>
+            <input
+              type="email"
+              name="userEmail"
+              defaultValue={user?.email}
+              className="input input-bordered w-full"
+              readOnly
+              required
+            />
+          </div>
+
+          {/* Service Image */}
+          <div>
+            <label className="label">
+              <span className="label-text">Service Image URL</span>
+            </label>
+            <input
+              type="url"
+              name="image"
+              placeholder="Image URL"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* Service Type */}
+          <div>
+            <label className="label">
+              <span className="label-text">Service Type</span>
+            </label>
+            <select
+              name="type"
+              defaultValue=""
+              className="select select-bordered w-full"
+              required
+            >
+              <option value="" disabled>
+                Pick a Service Type
+              </option>
+              <option>Design</option>
+              <option>HR Services</option>
+              <option>Development</option>
+            </select>
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="label">
+              <span className="label-text">Price</span>
+            </label>
+            <input
+              type="number"
+              name="price"
+              placeholder="Service Price"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* Submit */}
+          <div className="pt-4">
+            <button type="submit" className="btn btn-primary w-full">
+              Submit Service
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default AddService;

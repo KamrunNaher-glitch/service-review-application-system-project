@@ -8,7 +8,9 @@ const ServicesCard = ({ service }) => {
 
 
     return (
+    
         <div className="card card-compact bg-base-100  shadow-xl">
+            
             <div className='flex gap-2 m-2'>
                 <figure>
                     <img className='w-16'
