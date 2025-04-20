@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 import { FaDollarSign } from 'react-icons/fa';
 import { TbWorldCheck } from "react-icons/tb";
 import { Link } from 'react-router-dom';
@@ -7,21 +8,33 @@ const ServicesCard = ({ service, onDelete }) => {
   const { _id, serviceImage, serviceTitle, companyName, website, description, category, price, userEmail } = service;
 
   const handleDelete = async () => {
-    const confirm = window.confirm('Are you sure you want to delete this service?');
-    if (confirm) {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    });
+
+    if (result.isConfirmed) {
       try {
         const res = await fetch(`http://localhost:5000/services/${_id}`, {
           method: 'DELETE',
         });
 
-        if (res.ok) {
-          onDelete(_id); // Inform parent component to remove from local state
+        const data = await res.json();
+
+        if (data.deletedCount > 0) {
+          onDelete(_id); // remove from local state
+          Swal.fire('Deleted!', 'The service has been deleted.', 'success');
         } else {
-          alert('Failed to delete service');
+          Swal.fire('Oops!', 'Failed to delete the service.', 'error');
         }
       } catch (err) {
         console.error(err);
-        alert('An error occurred');
+        Swal.fire('Error', 'Something went wrong', 'error');
       }
     }
   };
@@ -57,3 +70,5 @@ const ServicesCard = ({ service, onDelete }) => {
 };
 
 export default ServicesCard;
+
+
