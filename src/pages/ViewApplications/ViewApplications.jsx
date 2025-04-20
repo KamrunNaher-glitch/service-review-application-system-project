@@ -4,11 +4,10 @@ import Swal from 'sweetalert2';
 
 const ViewApplications = () => {
     const applications = useLoaderData();
-    const handleStatusUpdate = (e, id) => {
 
-        const data = {
-            status: e.target.value
-        }
+    const handleStatusUpdate = (e, id) => {
+        const data = { status: e.target.value };
+
         fetch(`http://localhost:5000/service-application/${id}`, {
             method: 'PATCH',
             headers: {
@@ -26,43 +25,50 @@ const ViewApplications = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                   
                 }
-            })
-    }
+            });
+    };
 
     return (
-        <div>
-            <h2 className="text-3xl">Application for this Service:{applications.length}</h2>
-            <div className="overflow-x-auto">
-                <table className="table">
-                    {/* head */}
-                    <thead>
+        <div className="p-4">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">
+                Applications for this Service: {applications.length}
+            </h2>
+
+            <div className="overflow-x-auto shadow-md rounded-lg">
+                <table className="table w-full text-sm md:text-base">
+                    {/* Table Head */}
+                    <thead className="bg-base-200">
                         <tr>
-                            <th></th>
+                            <th>#</th>
                             <th>Email</th>
-                            <th>Update</th>
-                            <th>Favorite Color</th>
+                            <th>Service</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {
-                            applications.map((app, index) => <tr key={app._id}>
-                                <th>{index + 1}</th>
-                                <td>{app.applicant_email}</td>
-                                <td>Quality Control Specialist</td>
-                                <td><select onChange={(e) => handleStatusUpdate(e, app._id)}
-                                    defaultValue={app.status || 'Change Status'}
-                                    className="select select-bordered select-xs w-full max-w-xs">
-                                    <option disabled >Change Status</option>
-                                    <option>Under Review</option>
-                                    <option>Set Interview</option>
-                                    <option>Hired</option>
-                                    <option>Rejected</option>
-                                </select></td>
-                            </tr>)
-                        }
 
+                    {/* Table Body */}
+                    <tbody>
+                        {applications.map((app, index) => (
+                            <tr key={app._id}>
+                                <td>{index + 1}</td>
+                                <td className="break-all">{app.applicant_email}</td>
+                                <td className="whitespace-nowrap">{app.serviceTitle || 'N/A'}</td>
+                                <td>
+                                    <select
+                                        onChange={(e) => handleStatusUpdate(e, app._id)}
+                                        defaultValue={app.status || 'Change Status'}
+                                        className="select select-bordered select-xs md:select-sm w-full max-w-xs"
+                                    >
+                                        <option disabled>Change Status</option>
+                                        <option>Under Review</option>
+                                        <option>Set Interview</option>
+                                        <option>Hired</option>
+                                        <option>Rejected</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -71,3 +77,4 @@ const ViewApplications = () => {
 };
 
 export default ViewApplications;
+
