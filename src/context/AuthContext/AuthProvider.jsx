@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import {  createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import auth from '../../firebase/firebase.init';
+import axios from 'axios';
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({children}) => {
@@ -29,24 +30,36 @@ const AuthProvider = ({children}) => {
         return signOut(auth);
     }
 
-
-
-
-
-    useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth,currentUser =>{
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            console.log('state captured',currentUser);
-            setLaoding(false);
-        })
+            console.log('state captured', currentUser?.email);
+    
+            if (currentUser?.email) {
+                const user = { email: currentUser.email };
+                axios.post('http://localhost:5000/jwt', user, {
+                    withCredentials: true
+                })
+                .then(res => {
+                    console.log('login token', res.data);
+                    setLaoding(false);
+                });
+            } else {
+                axios.post('http://localhost:5000/logout', {}, {
+                    withCredentials: true
+                })
+                .then(res => {
+                    console.log('logout', res.data);
+                    setLaoding(false);
+                });
+            }
+        });
+    
         return () => {
             unsubscribe();
-        }
-    },[])
-
-
-
-
+        };
+    }, []);
+    
     const authInfo ={
         user,
         loading,
@@ -56,7 +69,6 @@ const AuthProvider = ({children}) => {
         signOutUser,
         
     }
-
 
     return (
        <AuthContext.Provider value={authInfo}>
