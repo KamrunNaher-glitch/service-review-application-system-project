@@ -23,7 +23,7 @@ const ServiceApply = () => {
             github,
             resume
         }
-        fetch('http://localhost:5000/service-application', {
+        fetch('https://service-review-application-system-project-server.vercel.app/service-application', {
             method: 'POST',
             headers: {
               'content-type': 'application/json'

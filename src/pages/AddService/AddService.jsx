@@ -12,7 +12,7 @@ const AddService = () => {
     const formData = new FormData(e.target);
     const initialData = Object.fromEntries(formData.entries());
 
-    fetch('http://localhost:5000/services', {
+    fetch('https://service-review-application-system-project-server.vercel.app/services', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

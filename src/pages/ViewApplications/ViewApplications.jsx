@@ -10,7 +10,7 @@ const ViewApplication = () => {
   useEffect(() => {
     const fetchApplication = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/service-application/${service_id}`, {
+        const res = await fetch(`https://service-review-application-system-project-server.vercel.app/service-application/${service_id}`, {
           credentials: 'include',
         });
 

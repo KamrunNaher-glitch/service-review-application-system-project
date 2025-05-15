@@ -20,7 +20,7 @@ const ServicesCard = ({ service, onDelete }) => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:5000/services/${_id}`, {
+        const res = await fetch(`https://service-review-application-system-project-server.vercel.app/services/${_id}`, {
           method: 'DELETE',
         });
 

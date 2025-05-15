@@ -9,7 +9,7 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        let url = 'http://localhost:5000/services';
+        let url = 'https://service-review-application-system-project-server.vercel.app/services';
         if (searchTerm) {
           url += `?search=${encodeURIComponent(searchTerm)}`;
         }

@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       {
         path: '/services/:id',
         element: <PrivateRoute><ServiceDetail></ServiceDetail></PrivateRoute>,
-        loader: ({ params }) => fetch(`http://localhost:5000/services/${params.id}`)
+        loader: ({ params }) => fetch(`https://service-review-application-system-project-server.vercel.app/services/${params.id}`)
       },
       {
         path: '/serviceapply/:id',
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
       {
         path: '/viewApplications/:service_id',
         element: <PrivateRoute><ViewApplications></ViewApplications></PrivateRoute>,
-        loader:({params}) => fetch(`http://localhost:5000/service-application/services/${params.service_id}`)
+        loader:({params}) => fetch(`https://service-review-application-system-project-server.vercel.app/service-application/services/${params.service_id}`)
       },
      
       {
